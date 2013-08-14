@@ -11,7 +11,7 @@ class ElFinderFileCommand extends ElfinderBaseCommand {
 		String target =  params['target']
 		String download = params['download']
 	
-		Map info = elFinderFileManager.file(unhash(target))
+		Map info = elFinderFileManager.cwd(unhash(target))
 		
 		response.setContentType("application/octet-stream")
 		response.setHeader("Content-disposition", "attachment; filename=\"$info.name\"")

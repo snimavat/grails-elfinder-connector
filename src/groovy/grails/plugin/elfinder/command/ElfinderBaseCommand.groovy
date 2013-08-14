@@ -31,17 +31,37 @@ class ElfinderBaseCommand {
 	}
 	
 	void cwd(String target) {		
-		putResponse("cwd", elFinderFileManager.file(unhash(target)))
+		putResponse("cwd", elFinderFileManager.cwd(unhash(target)))
 	}
 	
 	void files(String target, boolean tree = false) {
-		def files = elFinderFileManager.files(unhash(target), tree)
+		String path = unhash(target)
+		List files = []
+		def currentDir = elFinderFileManager.cwd(path)
+		if(isDir(currentDir)) {
+			files << currentDir
+		}
+		
+		if(tree) {
+			files.addAll(elFinderFileManager.getTree(elFinderFileManager.root, 0))
+		}
+		
+		List scanDir = elFinderFileManager.scanDir(path)
+		
+		for(f in scanDir) {
+			if(!files.contains(f)) files << f
+		} 
+		
 		putResponse("files", files)
 	}
 	
 	
 	void tree(String target) {
-		List tree = elFinderFileManager.tree(unhash(target))
+		String path = unhash(target)
+		List tree = []		
+		tree << elFinderFileManager.cwd(path)
+		tree.addAll(elFinderFileManager.getTree(path, 0))
+						
 		putResponse("tree", tree)
 	}
 	
@@ -57,4 +77,8 @@ class ElfinderBaseCommand {
 	String unhash(String hash) {
 		return elFinderFileManager.unhash(hash)
 	} 
+	
+	private boolean isDir(Map fileInfo) {
+		return fileInfo.mime == 'directory'
+	}
 }

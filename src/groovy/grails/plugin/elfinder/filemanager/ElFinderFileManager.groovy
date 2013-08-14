@@ -1,70 +1,74 @@
-package grails.plugin.elfinder.filemanager;
+package grails.plugin.elfinder.filemanager
 
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.MultipartFile
+import org.springframework.web.multipart.commons.CommonsMultipartFile
 
 /**
  * @author Sudhir Nimavat
  *
  */
 public interface ElFinderFileManager {
-	
-	String getRoot() 
+
+	String getRoot()
 
 	/**
 	 * Returns file info
 	 * 	
-	 * @param path - Path relative to root
-	 * @return
 	 */
-	Map file(String path)
-	
+	Map cwd(String path)
+
 	/**
-	 * Returns file info for all the files in given directory
-	 * 
-	 * @param path
-	 * @return
+	 * Return list of file info for each file and directory within given directory path
 	 */
-	List files(String path, boolean tree)
-	
+	List<Map> scanDir(String path)
+
 	/**
-	 * Return directory tree for given path
-	 * 
-	 * @param path
-	 * @return
+	 * Return subdirectory tree for given path
 	 */
-	List tree(String path)
-		
+	List<Map> getTree(String path, int deep)
+
 	/**
-	 * Retruns parents folder up to root for given path
-	 * 
-	 * @param path
-	 * @return
+	 *	Retruns parents folder up to root for given path\
 	 */
 	List parents(String path)
-	
-	
+
+	/**
+	 * Return options
+	 */
 	Map options(String path)
 	
-	String hash(String str)	
+	/**
+	 * Return hash for given path
+	 */
+	String hash(String str)
+	
+	/**
+	 *Return path for given hash 
+	 */
 	String unhash(String str)
-	
+
+	/**
+	 * Create new directory 
+	 */
 	List mkdir(String name, String target)
-	List mkfile(String name, String target)
-	String rename(String name, String target)
 	
+	/**
+	 * Create new file 
+	 */
+	List mkfile(String name, String target)
+	
+	/**
+	 * Rename file or directory
+	 */
+	String rename(String name, String target)
+
 	/**
 	 * Return file input stream for given path
-	 * @param path
-	 * @return
 	 */
 	InputStream getFileInputStream(String path)
-	
+
 	/**
 	 * Upload file to target directory and return file info if successful.
-	 * @param file
-	 * @param targetDir
-	 * @return
 	 */
 	Map uploadFile(CommonsMultipartFile file, String targetDir)
 }

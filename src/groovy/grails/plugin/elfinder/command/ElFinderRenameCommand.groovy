@@ -14,7 +14,7 @@ class ElFinderRenameCommand extends ElfinderBaseCommand {
 		
 		String renamed = elFinderFileManager.rename(name, unhash(target))
 
-		putResponse("added", [elFinderFileManager.file(unhash(renamed))])
+		putResponse("added", [elFinderFileManager.cwd(unhash(renamed))])
 		putResponse("removed", [target])				
 	}
 }
