@@ -1,17 +1,22 @@
 package grails.plugin.elfinder.filemanager
 
+import org.spockframework.util.Assert;
+
+import spock.lang.Shared
 import spock.lang.Specification
+import spock.lang.Unroll
 
 
 class ElfinderLocalFileSystemManagerSpec extends Specification {
 	
-	ElfinderLocalFileSystemFileManager manager
+	@Shared ElfinderLocalFileSystemFileManager manager
 	
-	def setup() {
+	def setupSpec() {
 		manager = new ElfinderLocalFileSystemFileManager()
 	}
 	
-	void "relativePathToRoot"() {
+	@Unroll()
+	void "Relative path of #path is #relative"() {
 		setup:
 		manager.root = "test/integration/resources"
 		
@@ -20,90 +25,96 @@ class ElfinderLocalFileSystemManagerSpec extends Specification {
 		
 		where:
 		path                                        | relative
-		"test/integration/resources"                | ""
+		"test/integration/resources"                | "root"
 		"test/integration/resources/dir1"           | "dir1"
 		"test/integration/resources/dir1/dir2"      | "dir1/dir2"
 		"test/integration/resources/dir1/file.txt"  | "dir1/file.txt"				
 	}
 	
-	void "file: verify file info"() {
+	@Unroll()
+	void "Verify file info for path #path"() {
 		setup:
 		manager.root = "test/integration/resources"
 		
 		when:
-		Map info = manager.file(path)
+		Map info = manager.cwd(path)
 		
 		then:
 		info != null
 		info.name == name
-		info.hash == hash
+		info.hash == pathhash
 		info.phash == phash
 		
 		where:
-		path									| name				| hash								| phash					| mime	
-		"test/integration/resources"	| "resources"		| hash("")							| null					| "directory"
-		"/dir1"								| "dir1"				| hash("dir1")						| hash("")				| "directory"
+		path									| name				| pathhash							| phash					| mime	
+		"test/integration/resources"	| "resources"		| hash("root")						| null					| "directory"
+		"/dir1"								| "dir1"				| hash("dir1")						| hash("root")			| "directory"
 		"/dir1/dir2/file.txt"			| "file.txt"		| hash("dir1/dir2/file.txt")	| hash("dir1/dir2")	| "text/plain"
 	}
 	
-	void "files: verify files list"() {
+	@Unroll
+	void "scanDir: for #path"() {
 		setup:
 		manager.root = "test/integration/resources"
 		
 		when:
-		List files = manager.files(path, false)
+		List files = manager.scanDir(path)
 		
 		then:
 		files.size == size
-				
+		
 		where:
-		path									| size
-		"test/integration/resources"	| 2
-		"/dir1"								| 2
-		"/dir1/dir2"						| 1
-		
-
+		path                           | size
+		"test/integration/resources"   | 2
+		"/dir1"                        | 2
+		"/dir1/dir3"                   | 1
 	}
 
-	void "files: verify file and directories info"() {
+	
+	void "verify isRoot"() {
+		setup:
+		manager.root = "test/integration/resources"
+
+		expect:
+		manager.isRoot(new File("test/integration/resources"))				
+	}
+	
+	@Unroll
+	void "verify parents for #path"() {
+		setup:
+		manager.root = "test/integration/resources"
+
+		when:
+		List files = manager.parents(path)
+		
+		then:
+		files.size == size
+		
+		where:
+		path                           | size
+		"test/integration/resources"   | 1
+		"/dir1"                        | 1
+		"/dir1/dir3"                   | 4
+
+	}
+	
+	void "getTree: verify file and directories info"() {
 		setup:
 		manager.root = "test/integration/resources"
 		
 		when:
-		List files = manager.files("test/integration/resources", true)
+		List files = manager.getTree("test/integration/resources", 1)
 		
 		then:
-		files.size == 2
-		files.find({ it instanceof Map && it.name == "3.txt"}) != null
-		files.find({ it instanceof List && it[0].name == "dir1"}) != null
-
+		files[0].name == "dir1"
+		files[1].name == "dir2"
 	}
-
-	void "tree: verify file and directories info"() {
-		setup:
-		manager.root = "test/integration/resources"
-		
-		when:
-		List files = manager.tree("test/integration/resources")
-		
-		then:
-		files[0].name == "resources"
-		files[1][0].name == "dir1"
-		files[1][1][0].name == "dir2"
-
-	}
-
-	
-	void "parents: verify parents tree"() {
-		
-	}
-	
 		
 	String hash(String str) {
-		str.encodeAsBase64()
+		return manager.hash(str)
 	}
 	
 	String unhash(String str) {
-		return new String(hash.decodeBase64())
+		return manager.unhash(str)
 	}
 }

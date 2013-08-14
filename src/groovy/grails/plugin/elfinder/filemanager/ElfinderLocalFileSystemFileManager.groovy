@@ -1,12 +1,5 @@
 package grails.plugin.elfinder.filemanager
 
-import java.io.InputStream
-import java.util.List
-import java.util.Map
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 
 /**
@@ -14,8 +7,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile
  *
  */
 class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
-
-	Logger log = LoggerFactory.getLogger("grails.plugin.elfinder.filemanager.ElfinderLocalFileSystemFileManager")
 
 	String root
 
@@ -79,7 +70,7 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 				def info = cwd(child)
 				dirs << info
 				if(deep > 0) {
-					dirs.addAll(getTree(child), deep -1)
+					dirs.addAll(getTree(child, deep -1))
 				}
 			}
 		}
@@ -141,13 +132,11 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		return hash(getPathRelativeToRoot(newFile))
 	}
 
-
 	Map options(String path) {
 		Map options = [:]
 		options.seperator = "/"
 		options.path = (getRootDir().name) + (isRoot(toFile(path)) ? "" : "/"+getPathRelativeToRoot(toFile(path)))
-		options.url = "http://localhost/files/1"
-		
+		//options.url = "http://localhost/files/1"		
 		return options
 	}
 
@@ -162,8 +151,6 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 	public Map uploadFile(CommonsMultipartFile multiPartFile, String targetDir) {
 		String name = multiPartFile.getOriginalFilename()
 		String directory = toFile(targetDir)
-
-		log.debug("uploading file $name to $targetDir")
 
 		File f = new File(directory, name)
 		boolean success = f.createNewFile()
@@ -213,7 +200,7 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		return new File(root)
 	}
 
-	private String getPathRelativeToRoot(File file) {
+	public String getPathRelativeToRoot(File file) {
 		String path = rootDir.toURI().relativize(file.toURI()).getPath()
 		if(path.endsWith("/")) {
 			path = path.substring(0, path.length() - 1)
@@ -225,7 +212,7 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		return path
 	}
 
-	private String getPathRelativeToRoot(String path) {
+	public String getPathRelativeToRoot(String path) {
 		File file = new File(path)
 		return getPathRelativeToRoot(file)
 	}
