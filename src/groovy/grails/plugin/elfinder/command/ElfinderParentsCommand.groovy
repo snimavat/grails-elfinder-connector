@@ -11,7 +11,7 @@ class ElfinderParentsCommand extends ElfinderBaseCommand {
 		String target = params['target']
 
 		if(!target) {
-			//addError("errOpen")
+			addError("errOpen")
 		} else {		
 			parents(target)
 		}

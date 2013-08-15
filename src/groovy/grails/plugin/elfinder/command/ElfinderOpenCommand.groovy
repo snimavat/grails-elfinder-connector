@@ -9,14 +9,15 @@ class ElfinderOpenCommand extends ElfinderBaseCommand {
 	
 	public void execute() {		
 		boolean init = params['init'] == "1"
-		String target =  params['target']
+		String target =  params['target'] ?: null
 		boolean tree = params['tree'] == "1"
 
 		
 		if(init) {
-			println "Inside init :"+init
+			log.debug("Init: Elfinder")			
 			putResponse("api", "2.0")
 			putResponse("netDrivers", [])
+			
 			if(!target) {
 				target = hash(elFinderFileManager.root)
 			}

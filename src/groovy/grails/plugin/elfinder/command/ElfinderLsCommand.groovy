@@ -11,7 +11,7 @@ class ElfinderLsCommand extends ElfinderBaseCommand {
 	void execute() {
 		String target = params['target']
 		
-		List files = elFinderFileManager.files(target, false)
+		List files = elFinderFileManager.scanDir(unhash(target))
 		List resp = files.collect { it.name }
 		
 		putResponse("list", resp)

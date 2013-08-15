@@ -24,4 +24,4 @@ log4j = {
 	 debug  'grails.plugin.elfinder'
 }
 
-grails.plugin.elfinder.rootDir = "F:\\work\\github\\elfinder-resources"
+grails.plugin.elfinder.rootDir = "test/integration/resources"

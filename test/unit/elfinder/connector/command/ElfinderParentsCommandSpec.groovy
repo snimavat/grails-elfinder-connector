@@ -15,6 +15,7 @@ class ElfinderParentsCommandSpec extends Specification {
 	
 	def setup() {
 		def control = mockFor(ElFinderFileManager)
+		control.demand.unhash(0..1) {String target -> return target }
 		control.demand.parents {String path -> ["mock list"] }
 		
 		mockFileManager = control.createMock()

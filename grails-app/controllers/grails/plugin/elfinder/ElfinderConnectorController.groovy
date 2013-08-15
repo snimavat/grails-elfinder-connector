@@ -19,19 +19,27 @@ class ElfinderConnectorController {
 		String cmd = params.cmd ?: "Unknown"
 		String commandName = "elfinder"+StringUtils.capitalize(cmd)+"Command"
 
+		log.debug("Executing command $commandName")
+
 		ElfinderBaseCommand command = grailsApplication.mainContext[commandName]
 
 		if(command == null) {
+			log.error("Unknown command received : $commandName")
 			render(status:400, text:"unknown command")
 		} else {
 			command.params = params
 			command.request = request
 			command.response = response
-			command.execute()
-			
-			if(!command.responseOutputDone) {
-				def resp = command.responseMap as JSON
-				render resp
+			try {
+				command.execute()
+				if(!command.responseOutputDone) {
+					def resp = command.responseMap as JSON
+					render resp
+				}
+			}catch(Exception e) {
+				log.error("Error encountered while executing command $commandName", e)
+				def resp = [error:e.message]
+				render resp as JSON
 			}
 		}
 	}

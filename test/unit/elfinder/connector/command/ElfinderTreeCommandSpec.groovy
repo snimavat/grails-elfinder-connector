@@ -15,7 +15,10 @@ class ElfinderTreeCommandSpec extends Specification {
 	
 	def setup() {
 		def control = mockFor(ElFinderFileManager)
-		control.demand.tree {String path -> ["mock list"] }
+		control.demand.unhash(0..1) {String target -> return target }
+		control.demand.cwd(0..1) {String path -> [name:"cwd", mime:"directory"]}
+		control.demand.getTree {String path, int deep -> [[name:"dir1", mime:"directory"], [name:"dir2", mime:"directory"]] }
+
 		
 		mockFileManager = control.createMock()
 		
@@ -33,7 +36,9 @@ class ElfinderTreeCommandSpec extends Specification {
 		
 		then:
 		command.responseMap.tree != null
-		command.responseMap.tree == ["mock list"]
+		command.responseMap.tree[0].name == "cwd"
+		command.responseMap.tree[1].name == "dir1"
+		command.responseMap.tree[2].name == "dir2"
 	}
 		
 }

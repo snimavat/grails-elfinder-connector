@@ -8,9 +8,12 @@ package grails.plugin.elfinder.command
 class ElfinderTreeCommand extends ElfinderBaseCommand {
 
 	@Override
-   public void execute() {
-		String target = params['target']	
-		tree(target)		
-   }
-		
+	public void execute() {
+		String target = params['target']
+		if(!target) {
+			addError("errOpen")
+		} else {
+			tree(target)
+		}
+	}
 }

@@ -13,8 +13,9 @@ class ElfinderLsCommandSpec extends Specification {
 	ElfinderLsCommand command
 	
 	def setup() {
-		def control = mockFor(ElFinderFileManager)
-		control.demand.files {String path, boolean tree -> [[name:"f1"], [name:"f2"]] }
+		def control = mockFor(ElFinderFileManager, true)
+		control.demand.unhash() {String target -> return target }
+		control.demand.scanDir {String path -> [[name:"f1"], [name:"f2"]] }
 		
 		mockFileManager = control.createMock()
 		

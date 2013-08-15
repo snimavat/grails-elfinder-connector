@@ -8,6 +8,8 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile
  */
 class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 
+	static final String VOLUME_ID = "v1_"
+
 	String root
 
 	@Override
@@ -28,7 +30,7 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		if(!isRoot(f)) {
 			info.phash = hash(getPathRelativeToRoot(file.parent))
 		} else {
-			info.volumeid = "v1_"
+			info.volumeid = VOLUME_ID
 		}
 		info.mime = file.isDirectory() ? "directory" :"text/plain"
 		info.ts = file.lastModified()
@@ -168,7 +170,7 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		hashed = hashed.replace("+", "-")
 		hashed = hashed.replace("/", "_")
 
-		hashed = "v1_"+hashed
+		hashed = VOLUME_ID+hashed
 
 		return hashed
 	}
