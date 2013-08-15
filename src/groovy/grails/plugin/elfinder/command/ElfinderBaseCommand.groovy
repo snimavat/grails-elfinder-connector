@@ -4,7 +4,6 @@ import grails.plugin.elfinder.filemanager.ElFinderFileManager
 
 import org.apache.commons.lang.Validate
 
-
 abstract class ElfinderBaseCommand {
 
 	ElFinderFileManager elFinderFileManager
@@ -17,14 +16,14 @@ abstract class ElfinderBaseCommand {
 
 	boolean responseOutputDone = false
 
-	public abstract void execute()
+	abstract void execute()
 
-	protected void putResponse(def key, def val) {
+	protected void putResponse(key, val) {
 		Validate.notNull(key, "Key can not be null")
 		responseMap[key] = val
 	}
 
-	protected void addError(def err) {
+	protected void addError(err) {
 		responseMap.clear()
 		responseMap["error"] = err
 	}
@@ -53,7 +52,6 @@ abstract class ElfinderBaseCommand {
 
 		putResponse("files", files)
 	}
-
 
 	void tree(String target) {
 		String path = unhash(target)

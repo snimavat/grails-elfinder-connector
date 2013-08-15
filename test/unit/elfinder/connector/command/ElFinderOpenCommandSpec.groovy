@@ -1,4 +1,3 @@
-
 package elfinder.connector.command
 
 import grails.plugin.elfinder.command.ElfinderOpenCommand
@@ -12,7 +11,7 @@ class ElFinderOpenCommandSpec extends Specification {
 
 	ElFinderFileManager mockFileManager
 	ElfinderOpenCommand command
-	
+
 	def setup() {
 		def control = mockFor(ElFinderFileManager, true)
 		control.demand.getRoot(0..2) {-> return "root" }
@@ -22,14 +21,13 @@ class ElFinderOpenCommandSpec extends Specification {
 		control.demand.scanDir {String path -> [[name:"dir1", mime:"directory"], [name:"file.txt", mime:"text"]] }
 		control.demand.hash(0..2) {String target -> return target }
 		control.demand.options() {String target -> return [:] }
-												
+
 		mockFileManager = control.createMock()
-		
+
 		command = new ElfinderOpenCommand()
 		command.elFinderFileManager = mockFileManager
 	}
-	
-	
+
 	void "open: init = true returns api version and options"() {
 		setup:
 		command.params = [init:"1"]
@@ -41,29 +39,29 @@ class ElFinderOpenCommandSpec extends Specification {
 		command.responseMap["api"] == "2.0"
 		command.responseMap["options"] != null
 	}
-	
+
 	void "open: init = null and no target results in error"() {
 		when:
 		command.execute()
-		
+
 		then:
 		command.responseMap.size() == 1
-		command.responseMap["error"] == "File not found"		
+		command.responseMap["error"] == "File not found"
 	}
-	
+
 	void "open: initialize root directory"() {
-		setup:		
+		setup:
 		command.params = [init:"1", tree:"1"]
-		
+
 		when:
-		command.execute();
-		
+		command.execute()
+
 		then:
 		Map resp = command.responseMap
 		resp.error == null
 		resp.api == "2.0"
 
-		resp.cwd.name == "cwd" 
+		resp.cwd.name == "cwd"
 		resp.files != null
 		resp.files[0].name == "cwd"
 		resp.files[1].name == "dir1"

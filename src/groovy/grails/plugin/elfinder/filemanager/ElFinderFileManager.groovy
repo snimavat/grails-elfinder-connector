@@ -1,19 +1,16 @@
 package grails.plugin.elfinder.filemanager
 
-import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 
 /**
  * @author Sudhir Nimavat
- *
  */
-public interface ElFinderFileManager {
+interface ElFinderFileManager {
 
 	String getRoot()
 
 	/**
 	 * Returns file info
-	 * 	
 	 */
 	Map cwd(String path)
 
@@ -43,17 +40,17 @@ public interface ElFinderFileManager {
 	String hash(String str)
 
 	/**
-	 *Return path for given hash 
+	 * Return path for given hash
 	 */
 	String unhash(String str)
 
 	/**
-	 * Create new directory 
+	 * Create new directory
 	 */
 	List mkdir(String name, String target)
 
 	/**
-	 * Create new file 
+	 * Create new file
 	 */
 	List mkfile(String name, String target)
 
@@ -63,8 +60,8 @@ public interface ElFinderFileManager {
 	String rename(String name, String target)
 
 	/**
-	 *Delete file or directory for given path, If directory is not empty, recursively delete all contents.
-	 * @return List of hash of all files and directories removed. 
+	 * Delete file or directory for given path, If directory is not empty, recursively delete all contents.
+	 * @return hashes of all files and directories removed.
 	 */
 	List delete(String path)
 

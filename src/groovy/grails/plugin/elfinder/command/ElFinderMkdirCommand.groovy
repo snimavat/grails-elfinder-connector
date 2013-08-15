@@ -1,9 +1,7 @@
 package grails.plugin.elfinder.command
 
 /**
- * 
  * @author Sudhir Nimavat
- *
  */
 class ElFinderMkdirCommand extends ElfinderBaseCommand {
 
