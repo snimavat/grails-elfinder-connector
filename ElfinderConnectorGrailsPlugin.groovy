@@ -2,7 +2,8 @@ import grails.plugin.elfinder.command.ElFinderFileCommand
 import grails.plugin.elfinder.command.ElFinderMkdirCommand
 import grails.plugin.elfinder.command.ElFinderMkfileCommand
 import grails.plugin.elfinder.command.ElFinderRenameCommand
-import grails.plugin.elfinder.command.ElFinderUploadCommand;
+import grails.plugin.elfinder.command.ElFinderRmCommand
+import grails.plugin.elfinder.command.ElFinderUploadCommand
 import grails.plugin.elfinder.command.ElfinderLsCommand
 import grails.plugin.elfinder.command.ElfinderOpenCommand
 import grails.plugin.elfinder.command.ElfinderParentsCommand
@@ -52,7 +53,7 @@ class ElfinderConnectorGrailsPlugin {
 			 elFinderFileManager = ref("elfinderFileManager")
 		 }
 
-		 elfinderMkFileCommand(ElFinderMkfileCommand) { bean ->
+		 elfinderMkfileCommand(ElFinderMkfileCommand) { bean ->
 			 bean.scope = "prototype"
 			 elFinderFileManager = ref("elfinderFileManager")
 		 }
@@ -62,6 +63,11 @@ class ElfinderConnectorGrailsPlugin {
 			 elFinderFileManager = ref("elfinderFileManager")
 		 }
 
+		 elfinderRmCommand(ElFinderRmCommand) { bean ->
+			 bean.scope = "prototype"
+			 elFinderFileManager = ref("elfinderFileManager")
+		 }
+		 
 		 elfinderLsCommand(ElfinderLsCommand) { bean ->
 			 bean.scope = "prototype"
 			 elFinderFileManager = ref("elfinderFileManager")

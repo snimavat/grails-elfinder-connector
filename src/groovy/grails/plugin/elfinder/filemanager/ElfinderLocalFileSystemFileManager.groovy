@@ -1,5 +1,11 @@
 package grails.plugin.elfinder.filemanager
 
+import grails.plugin.elfinder.MimeTypeMappings
+
+import org.apache.commons.io.FileUtils
+import org.apache.commons.io.FilenameUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 
 /**
@@ -10,6 +16,8 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 
 	static final String VOLUME_ID = "v1_"
 
+	Logger log = LoggerFactory.getLogger(ElfinderLocalFileSystemFileManager)
+	
 	String root
 
 	@Override
@@ -22,17 +30,16 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		return cwd(toFile(path))
 	}
 
-	public cwd(File f) {
-		File file  = f
+	public cwd(File file) {
 		Map info = [:]
 		info.name = file.name
 		info.hash = hash(getPathRelativeToRoot(file))
-		if(!isRoot(f)) {
+		if(!isRoot(file)) {
 			info.phash = hash(getPathRelativeToRoot(file.parent))
 		} else {
 			info.volumeid = VOLUME_ID
 		}
-		info.mime = file.isDirectory() ? "directory" :"text/plain"
+		info.mime = getMimeTypeForFile(file)
 		info.ts = file.lastModified()
 		info.size = file.size()
 		info.dirs = 1
@@ -134,6 +141,46 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		return hash(getPathRelativeToRoot(newFile))
 	}
 
+	
+	
+	@Override
+   public List delete(String path) {
+		log.info("Deleting : $path")
+		println("Deleting : $path")
+		List deleted = []
+		File file = toFile(path)
+		
+		if(!file.isDirectory()) {
+			String hash = hash(getPathRelativeToRoot(file))			
+			if(file.delete()) {
+				deleted << hash
+			}
+		} else {
+			deleted.addAll(deleteDir(file))
+		}
+		
+	   return deleted;
+   }
+
+	List deleteDir(File dir) {
+		List deleted = []
+		dir.eachFile {File child ->
+			if(child.isDirectory()) {
+				deleted.addAll(deleteDir(child))
+			} else {
+				if(child.delete()) {
+					deleted << hash(getPathRelativeToRoot(child))
+				}
+			}
+		}
+		
+		if(dir.delete()) {
+			deleted << hash(getPathRelativeToRoot(dir))
+		}
+		
+		return deleted
+	}
+	
 	Map options(String path) {
 		Map options = [:]
 		options.seperator = "/"
@@ -217,6 +264,13 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 	public String getPathRelativeToRoot(String path) {
 		File file = new File(path)
 		return getPathRelativeToRoot(file)
+	}
+	
+	String getMimeTypeForFile(File file) {
+		if(file.isDirectory()) {
+			return "directory"
+		}		
+		return MimeTypeMappings.forExtension(FilenameUtils.getExtension(file.name))
 	}
 
 }

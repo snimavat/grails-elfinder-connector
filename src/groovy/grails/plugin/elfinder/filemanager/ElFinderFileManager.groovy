@@ -28,7 +28,7 @@ public interface ElFinderFileManager {
 	List<Map> getTree(String path, int deep)
 
 	/**
-	 *	Retruns parents folder up to root for given path\
+	 *	Retruns parents folder up to root for given path
 	 */
 	List parents(String path)
 
@@ -62,6 +62,12 @@ public interface ElFinderFileManager {
 	 */
 	String rename(String name, String target)
 
+	/**
+	 *Delete file or directory for given path, If directory is not empty, recursively delete all contents.
+	 * @return List of hash of all files and directories removed. 
+	 */
+	List delete(String path)
+	
 	/**
 	 * Return file input stream for given path
 	 */

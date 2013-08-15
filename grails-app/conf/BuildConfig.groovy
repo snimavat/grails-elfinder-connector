@@ -14,6 +14,7 @@ grails.project.dependency.resolution = {
 	}
 	dependencies {
 		test("org.spockframework:spock-grails-support:0.7-groovy-2.0") { export = false }
+		compile "commons-io:commons-io:2.4"
 	}
 
 	plugins {
