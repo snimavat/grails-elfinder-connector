@@ -16,80 +16,80 @@ import grails.plugin.elfinder.filemanager.ElfinderLocalFileSystemFileManager
  *
  */
 class ElfinderConnectorGrailsPlugin {
-    // the plugin version
-    def version = "0.1"
-    def grailsVersion = "2.2 > *"
-    def title = "Elfinder Connector Plugin"
-    def author = "Your name"
-    def authorEmail = ""
-    def description = "Brief summary/description of the plugin"
-    def documentation = "http://grails.org/plugin/elfinder-connector"
-
-    def doWithSpring = {
-		 //configure file manger
-		 def pluginConfig = application.config.grails.plugin.elfinder
-		 elfinderFileManager(ElfinderLocalFileSystemFileManager) {
-			 root = pluginConfig.rootDir
-		 }
-		 
-		 //configure commands
-		 elfinderOpenCommand(ElfinderOpenCommand) { bean ->
-			 bean.scope = "prototype"
-			 elFinderFileManager = ref("elfinderFileManager")
-		 }
-
-		 elfinderParentsCommand(ElfinderParentsCommand) { bean ->
-			 bean.scope = "prototype"
-			 elFinderFileManager = ref("elfinderFileManager")
-		 }
-
-		 elfinderTreeCommand(ElfinderTreeCommand) { bean ->
-			 bean.scope = "prototype"
-			 elFinderFileManager = ref("elfinderFileManager")
-		 }
-
-		 elfinderMkdirCommand(ElFinderMkdirCommand) { bean ->
-			 bean.scope = "prototype"
-			 elFinderFileManager = ref("elfinderFileManager")
-		 }
-
-		 elfinderMkfileCommand(ElFinderMkfileCommand) { bean ->
-			 bean.scope = "prototype"
-			 elFinderFileManager = ref("elfinderFileManager")
-		 }
-
-		 elfinderRenameCommand(ElFinderRenameCommand) { bean ->
-			 bean.scope = "prototype"
-			 elFinderFileManager = ref("elfinderFileManager")
-		 }
-
-		 elfinderRmCommand(ElFinderRmCommand) { bean ->
-			 bean.scope = "prototype"
-			 elFinderFileManager = ref("elfinderFileManager")
-		 }
-		 
-		 elfinderLsCommand(ElfinderLsCommand) { bean ->
-			 bean.scope = "prototype"
-			 elFinderFileManager = ref("elfinderFileManager")
-		 }
-
-		 elfinderFileCommand(ElFinderFileCommand) { bean ->
-			 bean.scope = "prototype"
-			 elFinderFileManager = ref("elfinderFileManager")
-		 }
-
-		 elfinderUploadCommand(ElFinderUploadCommand) { bean ->
-			 bean.scope = "prototype"
-			 elFinderFileManager = ref("elfinderFileManager")
-		 }
-
-    }
+	// the plugin version
+	def version = "0.1"
+	def grailsVersion = "2.0 > *"
+	def title = "Elfinder Connector Plugin"
+	def author = "Sudhir Nimavat"
+	def authorEmail = "sudhir@nimavat.me"
+	def description = "Grails connector for elfinder file browser"
+	def documentation = "http://grails.org/plugin/elfinder-connector"
+	def scm = [system: 'GitHub', url: 'https://github.com/snimavat/grails-elfinder-connector']
+	def issueManagement = [ system: "GITHUB", url: "https://github.com/snimavat/grails-elfinder-connector/issues" ]
+	def license = "APACHE"
 
 
-    def onChange = { event ->
-    }
+	def doWithSpring = {
+		//configure file manger
+		def pluginConfig = application.config.grails.plugin.elfinder
 
-    def onConfigChange = { event ->
-    }
+		if(!pluginConfig?.rootDir) {
+			throw new RuntimeException("grails.plugin.elfinder.rootDir is not configured")
+		}
 
+		//configure fileManager
+		elfinderFileManager(ElfinderLocalFileSystemFileManager) { root = pluginConfig.rootDir }
+
+		//configure commands
+		elfinderOpenCommand(ElfinderOpenCommand) { bean ->
+			bean.scope = "prototype"
+			elFinderFileManager = ref("elfinderFileManager")
+		}
+
+		elfinderParentsCommand(ElfinderParentsCommand) { bean ->
+			bean.scope = "prototype"
+			elFinderFileManager = ref("elfinderFileManager")
+		}
+
+		elfinderTreeCommand(ElfinderTreeCommand) { bean ->
+			bean.scope = "prototype"
+			elFinderFileManager = ref("elfinderFileManager")
+		}
+
+		elfinderMkdirCommand(ElFinderMkdirCommand) { bean ->
+			bean.scope = "prototype"
+			elFinderFileManager = ref("elfinderFileManager")
+		}
+
+		elfinderMkfileCommand(ElFinderMkfileCommand) { bean ->
+			bean.scope = "prototype"
+			elFinderFileManager = ref("elfinderFileManager")
+		}
+
+		elfinderRenameCommand(ElFinderRenameCommand) { bean ->
+			bean.scope = "prototype"
+			elFinderFileManager = ref("elfinderFileManager")
+		}
+
+		elfinderRmCommand(ElFinderRmCommand) { bean ->
+			bean.scope = "prototype"
+			elFinderFileManager = ref("elfinderFileManager")
+		}
+
+		elfinderLsCommand(ElfinderLsCommand) { bean ->
+			bean.scope = "prototype"
+			elFinderFileManager = ref("elfinderFileManager")
+		}
+
+		elfinderFileCommand(ElFinderFileCommand) { bean ->
+			bean.scope = "prototype"
+			elFinderFileManager = ref("elfinderFileManager")
+		}
+
+		elfinderUploadCommand(ElFinderUploadCommand) { bean ->
+			bean.scope = "prototype"
+			elFinderFileManager = ref("elfinderFileManager")
+		}
+
+	}
 }

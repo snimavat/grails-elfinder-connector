@@ -185,7 +185,8 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		Map options = [:]
 		options.seperator = "/"
 		options.path = (getRootDir().name) + (isRoot(toFile(path)) ? "" : "/"+getPathRelativeToRoot(toFile(path)))
-		//options.url = "http://localhost/files/1"		
+		//options.url = "http://localhost/files/1"
+		options.disabled = ['tmb', 'size', 'dim', 'duplicate', 'paste', 'get', 'put', 'archive', 'extract', 'search', 'resize', 'netmount']		
 		return options
 	}
 
