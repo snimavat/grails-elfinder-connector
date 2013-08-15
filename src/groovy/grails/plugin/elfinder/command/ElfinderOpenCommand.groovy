@@ -11,7 +11,6 @@ class ElfinderOpenCommand extends ElfinderBaseCommand {
 		boolean init = params['init'] == "1"
 		String target =  params['target'] ?: null
 		boolean tree = params['tree'] == "1"
-
 		
 		if(init) {
 			log.debug("Init: Elfinder")			

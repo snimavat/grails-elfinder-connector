@@ -36,12 +36,12 @@ public interface ElFinderFileManager {
 	 * Return options
 	 */
 	Map options(String path)
-	
+
 	/**
 	 * Return hash for given path
 	 */
 	String hash(String str)
-	
+
 	/**
 	 *Return path for given hash 
 	 */
@@ -51,12 +51,12 @@ public interface ElFinderFileManager {
 	 * Create new directory 
 	 */
 	List mkdir(String name, String target)
-	
+
 	/**
 	 * Create new file 
 	 */
 	List mkfile(String name, String target)
-	
+
 	/**
 	 * Rename file or directory
 	 */
@@ -67,7 +67,7 @@ public interface ElFinderFileManager {
 	 * @return List of hash of all files and directories removed. 
 	 */
 	List delete(String path)
-	
+
 	/**
 	 * Return file input stream for given path
 	 */

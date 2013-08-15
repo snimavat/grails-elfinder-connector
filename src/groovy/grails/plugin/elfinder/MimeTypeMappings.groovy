@@ -1,9 +1,8 @@
 package grails.plugin.elfinder
 
-
 class MimeTypeMappings {
-	
-	private static Map mappings = [		
+
+	private static Map mappings = [
 		// applications
 		'ai'    : 'application/postscript',
 		'eps'   : 'application/postscript',
@@ -119,10 +118,10 @@ class MimeTypeMappings {
 		'webm'  : 'video/webm',
 		'ogv'   : 'video/ogg',
 		'ogm'   : 'video/ogg'
-		]
-	
-	
+	]
+
+
 	public static String forExtension(String extension) {
-		return mappings[extension] ?: "unknown"	
+		return mappings[extension] ?: "unknown"
 	}
 }

@@ -12,7 +12,7 @@ class ElFinderRmCommand extends ElfinderBaseCommand {
 		List targets =  params.list('targets[]')	
 		
 		List removed = []
-		targets.each { 
+		targets.each {
 			removed.addAll(elFinderFileManager.delete(unhash(it)))
 		}			
 		putResponse("removed",removed )	

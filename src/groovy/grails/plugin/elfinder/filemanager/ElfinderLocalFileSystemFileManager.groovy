@@ -17,7 +17,7 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 	static final String VOLUME_ID = "v1_"
 
 	Logger log = LoggerFactory.getLogger(ElfinderLocalFileSystemFileManager)
-	
+
 	String root
 
 	@Override
@@ -56,7 +56,7 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		return scanDir(dir)
 	}
 
-	
+
 	List<Map> scanDir(File dir) {
 		List files = []
 		if(dir.isDirectory()) {
@@ -141,26 +141,26 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		return hash(getPathRelativeToRoot(newFile))
 	}
 
-	
-	
+
+
 	@Override
-   public List delete(String path) {
+	public List delete(String path) {
 		log.info("Deleting : $path")
 		println("Deleting : $path")
 		List deleted = []
 		File file = toFile(path)
-		
+
 		if(!file.isDirectory()) {
-			String hash = hash(getPathRelativeToRoot(file))			
+			String hash = hash(getPathRelativeToRoot(file))
 			if(file.delete()) {
 				deleted << hash
 			}
 		} else {
 			deleted.addAll(deleteDir(file))
 		}
-		
-	   return deleted;
-   }
+
+		return deleted
+	}
 
 	List deleteDir(File dir) {
 		List deleted = []
@@ -173,24 +173,36 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 				}
 			}
 		}
-		
+
 		if(dir.delete()) {
 			deleted << hash(getPathRelativeToRoot(dir))
 		}
-		
+
 		return deleted
 	}
-	
+
 	Map options(String path) {
 		Map options = [:]
 		options.seperator = "/"
 		options.path = (getRootDir().name) + (isRoot(toFile(path)) ? "" : "/"+getPathRelativeToRoot(toFile(path)))
 		//options.url = "http://localhost/files/1"
-		options.disabled = ['tmb', 'size', 'dim', 'duplicate', 'paste', 'get', 'put', 'archive', 'extract', 'search', 'resize', 'netmount']		
+		options.disabled = [
+			'tmb',
+			'size',
+			'dim',
+			'duplicate',
+			'paste',
+			'get',
+			'put',
+			'archive',
+			'extract',
+			'search',
+			'resize',
+			'netmount']
 		return options
 	}
 
-	
+
 	@Override
 	public InputStream getFileInputStream(String path) {
 		File file = toFile(path)
@@ -232,7 +244,7 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		hashed = hashed.replace("_", "/")
 		return new String(hashed.decodeBase64())
 	}
-	
+
 	private File toFile(String path) {
 		if(path.trim() == root || path == "root") {
 			return rootDir
@@ -266,12 +278,11 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		File file = new File(path)
 		return getPathRelativeToRoot(file)
 	}
-	
+
 	String getMimeTypeForFile(File file) {
 		if(file.isDirectory()) {
 			return "directory"
-		}		
+		}
 		return MimeTypeMappings.forExtension(FilenameUtils.getExtension(file.name))
 	}
-
 }

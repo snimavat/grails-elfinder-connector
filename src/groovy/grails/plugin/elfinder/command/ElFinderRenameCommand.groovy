@@ -5,16 +5,15 @@ package grails.plugin.elfinder.command
  *
  */
 class ElFinderRenameCommand extends ElfinderBaseCommand {
-		
+
 	@Override
 	void execute() {
 		String current =  params['current']
 		String target =  params['target']
 		String name = params['name']
-		
-		String renamed = elFinderFileManager.rename(name, unhash(target))
 
+		String renamed = elFinderFileManager.rename(name, unhash(target))
 		putResponse("added", [elFinderFileManager.cwd(unhash(renamed))])
-		putResponse("removed", [target])				
+		putResponse("removed", [target])
 	}
 }
