@@ -1,13 +1,12 @@
 package grails.plugin.elfinder.command
 
 /**
- * 
  * @author Sudhir Nimavat
- *
  */
 class ElfinderOpenCommand extends ElfinderBaseCommand {
 
-	public void execute() {
+	@Override
+	void execute() {
 		boolean init = params['init'] == "1"
 		String target =  params['target'] ?: null
 		boolean tree = params['tree'] == "1"

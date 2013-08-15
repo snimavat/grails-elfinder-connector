@@ -2,35 +2,23 @@ package grails.plugin.elfinder.filemanager
 
 import grails.plugin.elfinder.MimeTypeMappings
 
-import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 
 /**
  * @author Sudhir Nimavat
- *
  */
 class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 
 	static final String VOLUME_ID = "v1_"
 
-	Logger log = LoggerFactory.getLogger(ElfinderLocalFileSystemFileManager)
-
 	String root
 
-	@Override
-	public String getRoot() {
-		return root
-	}
-
-	@Override
-	public Map cwd(String path) {
+	Map cwd(String path) {
 		return cwd(toFile(path))
 	}
 
-	public cwd(File file) {
+	Map cwd(File file) {
 		Map info = [:]
 		info.name = file.name
 		info.hash = hash(getPathRelativeToRoot(file))
@@ -50,12 +38,10 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		return info
 	}
 
-	@Override
 	List<Map> scanDir(String path) {
 		File dir = toFile(path)
 		return scanDir(dir)
 	}
-
 
 	List<Map> scanDir(File dir) {
 		List files = []
@@ -67,12 +53,11 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		return files
 	}
 
-
-	public List<Map> getTree(String path, int deep) {
+	List<Map> getTree(String path, int deep) {
 		return getTree(toFile(path), deep)
 	}
 
-	public List<Map> getTree(File f, int deep) {
+	List<Map> getTree(File f, int deep) {
 		List dirs = []
 		f.eachFile {File child ->
 			if(child.isDirectory()) {
@@ -86,13 +71,12 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		return dirs
 	}
 
-	@Override
-	public List parents(String path) {
+	List parents(String path) {
 		File f = toFile(path)
 		return parents(f)
 	}
 
-	public List parents(File current) {
+	List parents(File current) {
 		List tree = []
 		File dir = current
 		while(!isRoot(dir)) {
@@ -110,7 +94,6 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 
 		return tree ?: [cwd(current)]
 	}
-
 
 	List mkdir(String name, String target) {
 		String parent = toFile(target)
@@ -141,10 +124,7 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		return hash(getPathRelativeToRoot(newFile))
 	}
 
-
-
-	@Override
-	public List delete(String path) {
+	List delete(String path) {
 		log.info("Deleting : $path")
 		println("Deleting : $path")
 		List deleted = []
@@ -202,15 +182,12 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		return options
 	}
 
-
-	@Override
-	public InputStream getFileInputStream(String path) {
+	InputStream getFileInputStream(String path) {
 		File file = toFile(path)
 		return new FileInputStream(file)
 	}
 
-	@Override
-	public Map uploadFile(CommonsMultipartFile multiPartFile, String targetDir) {
+	Map uploadFile(CommonsMultipartFile multiPartFile, String targetDir) {
 		String name = multiPartFile.getOriginalFilename()
 		String directory = toFile(targetDir)
 
@@ -222,7 +199,6 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		}
 		return null
 	}
-
 
 	String hash(String str) {
 		String hashed = str.encodeAsBase64()
@@ -253,16 +229,15 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		}
 	}
 
-
-	public boolean isRoot(File f) {
+	boolean isRoot(File f) {
 		f == rootDir
 	}
 
-	public File getRootDir() {
+	File getRootDir() {
 		return new File(root)
 	}
 
-	public String getPathRelativeToRoot(File file) {
+	String getPathRelativeToRoot(File file) {
 		String path = rootDir.toURI().relativize(file.toURI()).getPath()
 		if(path.endsWith("/")) {
 			path = path.substring(0, path.length() - 1)
@@ -274,7 +249,7 @@ class ElfinderLocalFileSystemFileManager implements ElFinderFileManager {
 		return path
 	}
 
-	public String getPathRelativeToRoot(String path) {
+	String getPathRelativeToRoot(String path) {
 		File file = new File(path)
 		return getPathRelativeToRoot(file)
 	}

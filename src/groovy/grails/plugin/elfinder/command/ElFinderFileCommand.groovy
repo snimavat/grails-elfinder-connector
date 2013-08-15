@@ -2,7 +2,6 @@ package grails.plugin.elfinder.command
 
 /**
  * @author Sudhir Nimavat
- *
  */
 class ElFinderFileCommand extends ElfinderBaseCommand {
 

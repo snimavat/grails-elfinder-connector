@@ -10,15 +10,12 @@ import grails.plugin.elfinder.command.ElfinderParentsCommand
 import grails.plugin.elfinder.command.ElfinderTreeCommand
 import grails.plugin.elfinder.filemanager.ElfinderLocalFileSystemFileManager
 
-
 /**
  * @author Sudhir Nimavat
- *
  */
 class ElfinderConnectorGrailsPlugin {
-	// the plugin version
 	def version = "0.1"
-	def grailsVersion = "1.3 > *"
+	def grailsVersion = "2.0 > *"
 	def title = "Elfinder Connector Plugin"
 	def author = "Sudhir Nimavat"
 	def authorEmail = "sudhir@nimavat.me"
@@ -27,7 +24,6 @@ class ElfinderConnectorGrailsPlugin {
 	def scm = [system: 'GitHub', url: 'https://github.com/snimavat/grails-elfinder-connector']
 	def issueManagement = [ system: "GITHUB", url: "https://github.com/snimavat/grails-elfinder-connector/issues" ]
 	def license = "APACHE"
-
 
 	def doWithSpring = {
 		//configure file manger
@@ -41,55 +37,30 @@ class ElfinderConnectorGrailsPlugin {
 		elfinderFileManager(ElfinderLocalFileSystemFileManager) { root = pluginConfig.rootDir }
 
 		//configure commands
-		elfinderOpenCommand(ElfinderOpenCommand) { bean ->
+
+		def configurationClosure = { bean ->
 			bean.scope = "prototype"
 			elFinderFileManager = ref("elfinderFileManager")
 		}
 
-		elfinderParentsCommand(ElfinderParentsCommand) { bean ->
-			bean.scope = "prototype"
-			elFinderFileManager = ref("elfinderFileManager")
-		}
+		elfinderOpenCommand(ElfinderOpenCommand, configurationClosure)
 
-		elfinderTreeCommand(ElfinderTreeCommand) { bean ->
-			bean.scope = "prototype"
-			elFinderFileManager = ref("elfinderFileManager")
-		}
+		elfinderParentsCommand(ElfinderParentsCommand, configurationClosure)
 
-		elfinderMkdirCommand(ElFinderMkdirCommand) { bean ->
-			bean.scope = "prototype"
-			elFinderFileManager = ref("elfinderFileManager")
-		}
+		elfinderTreeCommand(ElfinderTreeCommand, configurationClosure)
 
-		elfinderMkfileCommand(ElFinderMkfileCommand) { bean ->
-			bean.scope = "prototype"
-			elFinderFileManager = ref("elfinderFileManager")
-		}
+		elfinderMkdirCommand(ElFinderMkdirCommand, configurationClosure)
 
-		elfinderRenameCommand(ElFinderRenameCommand) { bean ->
-			bean.scope = "prototype"
-			elFinderFileManager = ref("elfinderFileManager")
-		}
+		elfinderMkfileCommand(ElFinderMkfileCommand, configurationClosure)
 
-		elfinderRmCommand(ElFinderRmCommand) { bean ->
-			bean.scope = "prototype"
-			elFinderFileManager = ref("elfinderFileManager")
-		}
+		elfinderRenameCommand(ElFinderRenameCommand, configurationClosure)
 
-		elfinderLsCommand(ElfinderLsCommand) { bean ->
-			bean.scope = "prototype"
-			elFinderFileManager = ref("elfinderFileManager")
-		}
+		elfinderRmCommand(ElFinderRmCommand, configurationClosure)
 
-		elfinderFileCommand(ElFinderFileCommand) { bean ->
-			bean.scope = "prototype"
-			elFinderFileManager = ref("elfinderFileManager")
-		}
+		elfinderLsCommand(ElfinderLsCommand, configurationClosure)
 
-		elfinderUploadCommand(ElFinderUploadCommand) { bean ->
-			bean.scope = "prototype"
-			elFinderFileManager = ref("elfinderFileManager")
-		}
+		elfinderFileCommand(ElFinderFileCommand, configurationClosure)
 
+		elfinderUploadCommand(ElFinderUploadCommand, configurationClosure)
 	}
 }

@@ -3,3 +3,5 @@
 /scripts
 /lib
 /.settings
+/plugin.xml
+/grails-elfinder-connector-*.zip
