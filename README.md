@@ -3,6 +3,8 @@ grails-elfinder-connector
 
 Elfinder file browser connector for grails
 
+elfinder demo : http://elfinder.org/
+
 ### How to use.
 *Step 1:*
 Configure root directory using `grails.plugin.elfinder.rootDir = "PATH_TO_ROOT_DIR"`
