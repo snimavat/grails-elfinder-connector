@@ -18,7 +18,7 @@ import grails.plugin.elfinder.filemanager.ElfinderLocalFileSystemFileManager
 class ElfinderConnectorGrailsPlugin {
 	// the plugin version
 	def version = "0.1"
-	def grailsVersion = "2.0 > *"
+	def grailsVersion = "1.3 > *"
 	def title = "Elfinder Connector Plugin"
 	def author = "Sudhir Nimavat"
 	def authorEmail = "sudhir@nimavat.me"
