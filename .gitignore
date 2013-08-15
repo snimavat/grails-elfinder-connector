@@ -5,3 +5,4 @@
 /.settings
 /plugin.xml
 /grails-elfinder-connector-*.zip
+/target-eclipse

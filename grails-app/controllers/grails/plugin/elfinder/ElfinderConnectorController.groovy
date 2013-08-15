@@ -27,6 +27,7 @@ class ElfinderConnectorController {
 		command.params = params
 		command.request = request
 		command.response = response
+		
 		try {
 			command.execute()
 			if(!command.responseOutputDone) {
