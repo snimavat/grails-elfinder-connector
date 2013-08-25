@@ -16,7 +16,7 @@ import grails.plugin.elfinder.filemanager.ElfinderLocalFileSystemFileManager
 class ElfinderConnectorGrailsPlugin {
 	def version = "0.1"
 	def grailsVersion = "2.0 > *"
-	def title = "Elfinder Connector Plugin"
+	def title = "Elfinder file explorer connector for Grails"
 	def author = "Sudhir Nimavat"
 	def authorEmail = "sudhir@nimavat.me"
 	def description = "Grails connector for elfinder file browser"
@@ -26,7 +26,6 @@ class ElfinderConnectorGrailsPlugin {
 	def license = "APACHE"
 
 	def doWithSpring = {
-		//configure file manger
 		def pluginConfig = application.config.grails.plugin.elfinder
 
 		if(!pluginConfig?.rootDir) {
